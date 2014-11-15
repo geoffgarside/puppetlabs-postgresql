@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>KeepAlive</key>
+  <true/>
+  <key>Label</key>
+  <string><%= @service_name %></string>
+  <key>ProgramArguments</key>
+  <array>
+    <string><%= @bindir %>/postgres</string>
+    <string>-D</string>
+    <string><%= @datadir %></string>
+    <string>-r</string>
+    <string><%= @datadir %>/server.log</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>WorkingDirectory</key>
+  <string>/usr/local</string>
+  <key>StandardErrorPath</key>
+  <string><%= @datadir %>/server.log</string>
+  <key>UserName</key>
+  <string><%= @user %></string>
+  <key>GroupName</key>
+  <string><%= @group %></string>
+</dict>
+</plist>

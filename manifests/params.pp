@@ -164,8 +164,8 @@ class postgresql::params inherits postgresql::globals {
       $python_package_name  = pick($python_package_name, 'undef')
 
       $service_name         = pick($service_name, 'homebrew.mxcl.postgresql')
-      $bindir               = pick($bindir, '/usr/local/bin')
-      $datadir              = pick($datadir, '/usr/local/var/postgresql')
+      $bindir               = pick($bindir, '/usr/local/opt/postgresql/bin')
+      $datadir              = pick($datadir, '/usr/local/var/postgres')
       $confdir              = pick($confdir, $datadir)
       $service_status       = pick($service_status, 'undef')
       $psql_path            = pick($psql_path, "${bindir}/psql")
@@ -173,13 +173,8 @@ class postgresql::params inherits postgresql::globals {
       $firewall_supported   = pick($firewall_supported, false)
       $needs_initdb         = pick($needs_initdb, false)
 
-      if $user != 'pgsql' {
-        $service_rc         = "/Users/${user}/Library/LaunchAgents/${service_name}.plist"
-      } else {
-        $service_rc         = "/Library/LaunchDaemons/${service_name}.plist"
-      }
-
-      $service_source       = "/usr/local/opt/postgresql/${service_name}.plist"
+      $service_rc           = "/Library/LaunchDaemons/${service_name}.plist"
+      $service_erb          = 'postgresql/launchd-plist.erb'
     }
 
     default: {

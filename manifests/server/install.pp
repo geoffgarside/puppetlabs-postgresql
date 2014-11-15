@@ -54,12 +54,19 @@ class postgresql::server::install {
       default  => 'file',
     }
 
+    # Template variables
+    $service_name = $postgresql::server::service_name
+    $bindir       = $postgresql::params::bindir
+    $datadir      = $postgresql::server::datadir
+    $user         = $postgresql::server::user
+    $group        = $postgresql::server::group
+
     file { $postgresql::params::service_rc:
       ensure => $_file_ensure,
-      owner  => $postgresql::server::user,
-      group  => $postgresql::server::group,
+      owner  => 'root',
+      group  => '0',
       mode   => '0644',
-      source => $postgresql::params::service_source,
+      content => template($postgresql::params::service_erb),
     }
   }
 
