@@ -46,4 +46,21 @@ class postgresql::server::install {
     tag    => 'postgresql',
   }
 
+  if $::osfamily == 'Darwin' {
+    $_file_ensure = $package_ensure ? {
+      true     => 'file',
+      false    => 'absent',
+      'absent' => 'absent',
+      default  => 'file',
+    }
+
+    file { $postgresql::params::service_rc:
+      ensure => $_file_ensure,
+      owner  => 'root',
+      group  => '0',
+      mode   => '0644',
+      source => $postgresql::params::service_source,
+    }
+  }
+
 }
