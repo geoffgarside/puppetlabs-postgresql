@@ -173,7 +173,12 @@ class postgresql::params inherits postgresql::globals {
       $firewall_supported   = pick($firewall_supported, false)
       $needs_initdb         = pick($needs_initdb, false)
 
-      $service_rc           = "~/Library/LaunchAgents/${service_name}.plist"
+      if $user != 'pgsql' {
+        $service_rc         = "/Users/${user}/Library/LaunchAgents/${service_name}.plist"
+      } else {
+        $service_rc         = "/Library/LaunchDaemons/${service_name}.plist"
+      }
+
       $service_source       = "/usr/local/opt/postgresql/${service_name}.plist"
     }
 
