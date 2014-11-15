@@ -151,7 +151,7 @@ class postgresql::params inherits postgresql::globals {
       $user                 = pick($user, 'pgsql')
       $group                = pick($group, 'pgsql')
 
-      $client_package_name  = pick($client_package_name, 'postgresql')
+      $client_package_name  = pick($client_package_name, undef)
       $server_package_name  = pick($server_package_name, 'postgresql')
       # brew postgresql includes contrib?
       $contrib_package_name = pick($contrib_package_name, 'undef')
