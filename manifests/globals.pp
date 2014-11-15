@@ -80,6 +80,7 @@ class postgresql::globals (
       default => '9.2',
     },
     'FreeBSD' => '93',
+    'Darwin' => '9.3',
     default => undef,
   }
   $globals_version = pick($version, $default_version, 'unknown')
