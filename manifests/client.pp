@@ -5,12 +5,10 @@ class postgresql::client (
 ) inherits postgresql::params {
   validate_string($package_name)
 
-  if $package_name != 'undef' {
-    package { 'postgresql-client':
-      ensure  => $package_ensure,
-      name    => $package_name,
-      tag     => 'postgresql',
-    }
+  package { 'postgresql-client':
+    ensure  => $package_ensure,
+    name    => $package_name,
+    tag     => 'postgresql',
   }
 
   $file_ensure = $package_ensure ? {
