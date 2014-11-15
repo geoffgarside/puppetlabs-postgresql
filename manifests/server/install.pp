@@ -40,6 +40,7 @@ class postgresql::server::install {
   package { 'postgresql-server':
     ensure => $_package_ensure,
     name   => $package_name,
+    alias  => 'postgresql-server',
 
     # This is searched for to create relationships with the package repos, be
     # careful about its removal
