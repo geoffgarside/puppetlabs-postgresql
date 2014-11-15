@@ -56,8 +56,8 @@ class postgresql::server::install {
 
     file { $postgresql::params::service_rc:
       ensure => $_file_ensure,
-      owner  => 'root',
-      group  => '0',
+      owner  => $postgresql::server::user,
+      group  => $postgresql::server::group,
       mode   => '0644',
       source => $postgresql::params::service_source,
     }
