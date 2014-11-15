@@ -167,7 +167,7 @@ class postgresql::params inherits postgresql::globals {
       $bindir               = pick($bindir, '/usr/local/bin')
       $datadir              = pick($datadir, '/usr/local/var/postgresql')
       $confdir              = pick($confdir, $datadir)
-      $service_status       = pick($service_status, "")
+      $service_status       = pick($service_status, 'undef')
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
       $firewall_supported   = pick($firewall_supported, false)
