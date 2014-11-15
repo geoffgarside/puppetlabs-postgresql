@@ -147,6 +147,33 @@ class postgresql::params inherits postgresql::globals {
       $needs_initdb         = pick($needs_initdb, true)
     }
 
+    'Darwin': {
+      $user                 = pick($user, 'pgsql')
+      $group                = pick($group, 'pgsql')
+
+      $client_package_name  = pick($client_package_name, 'undef')
+      $server_package_name  = pick($server_package_name, 'postgresql')
+      # brew postgresql includes contrib?
+      $contrib_package_name = pick($contrib_package_name, 'undef')
+      $devel_package_name   = pick($devel_package_name, 'libpqxx')
+      # Not included by homebrew, maybe https://github.com/gbeine/homebrew-java/blob/master/postgresql-jdbc.rb
+      $java_package_name    = pick($java_package_name, 'undef')
+      # brew postgresql includes perl by default
+      $plperl_package_name  = pick($plperl_package_name, 'undef')
+      # brew postgresql --with-python, how do we handle this?
+      $python_package_name  = pick($python_package_name, 'undef')
+
+      $service_name         = pick($service_name, 'homebrew.mxcl.postgresql')
+      $bindir               = pick($bindir, '/usr/local/bin')
+      $datadir              = pick($datadir, '/usr/local/var/postgresql')
+      $confdir              = pick($confdir, $datadir)
+      $service_status       = pick($service_status, "")
+      $psql_path            = pick($psql_path, "${bindir}/psql")
+
+      $firewall_supported   = pick($firewall_supported, false)
+      $needs_initdb         = pick($needs_initdb, false)
+    }
+
     default: {
       # Based on the existing version of the firewall module, this is normally
       # false for other OS, but this allows an escape hatch to override it.
