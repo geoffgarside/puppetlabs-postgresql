@@ -1,10 +1,160 @@
-2014-02-12 - Version 3.3.1
-Bugfix:
+##2014-11-04 - Supported Release 4.1.0
+###Summary
+
+This release adds the ability to change the PGDATA directory, and also includes documentation and test updates, future parser support, and a few other new features.
+
+####Features
+- Future parser support
+- Documentation updates
+- Test updates
+- Add a link from `/etc/sysconfig/pgsql/postgresql-${version}` to `/etc/sysconfig/pgsql/postgresql` to support init scripts from the postgresql.org repo
+- Add support for changing the PGDATA directory
+- Set default versions for Fedora 21 and FreeBSD
+
+##2014-09-03 - Supported Release 4.0.0
+###Summary
+
+This release removes the uninstall ability from the module, removes the firewall
+management, overhauls all of the acceptance testing, as well as adds better
+support for SuSE and Fedora.
+
+###Backwards Incompatible changes.
+
+- Uninstall code removal.
+- Firewall management for Postgres.
+- Set manage_pg_ident_conf to true.
+
+####Uninstallation removal
+
+We rely heavily on the ability to uninstall and reinstall postgres throughout
+our testing code, testing features like "can I move from the distribution
+packages to the upstream packages through the module" and over time we've
+learnt that the uninstall code simply doesn't work a lot of the time.  It
+leaves traces of postgres behind or fails to remove certain packages on Ubuntu,
+and generally causes bits to be left on your system that you didn't expect.
+
+When we then reinstall things fail because it's not a true clean slate, and
+this causes us enormous problems during test.  We've spent weeks and months
+working on these tests and they simply don't hold up well across the full range
+of PE platforms.
+
+Due to all these problems we've decided to take a stance on uninstalling in
+general.  We feel that in 2014 it's completely reasonable and normal to have a
+good provisioning pipeline combined with your configuration management and the
+"correct" way to uninstall a fully installed service like postgresql is to
+simply reprovision the server without it in the first place.  As a general rule
+this is how I personally like to work and I think is a good practice.
+
+####I'm not OK with this!
+
+We understand that there are environments and situations in which it's not easy
+to do that.  What if you accidently deployed Postgres on 100,000 nodes?  In the
+future we're going to take a look at building some example 'profiles' to be
+found under examples/ within this module that can uninstall postgres on popular
+platforms.  These can be modified and used in your specific case to uninstall
+postgresql.  They will be much more brute force and reliant on deleting entire
+directories and require you to do more work up front in specifying where things
+are installed but we think it'll prove to be a much cleaner mechanism for this
+kind of thing rather than trying to weave it into the main module logic itself.
+
+####Features
+- Removal of uninstall.
+- Removal of firewall management.
+- Tests ported to rspec3.
+- Acceptance tests rewritten.
+- Add a defined type for creating database schemas.
+- Add a pg_ident_rule defined type.
+- Set manage_pg_ident_conf to true.
+- Manage pg_ident.conf by default.
+- Improve selinux support for tablespace.
+- Remove deprecation warnings.
+- Support changing PGDATA on RedHat.
+- Add SLES 11 support.
+
+####Bugfixes
+- Link pg_config binary into /usr/bin.
+- Fix fedora support by using systemd.
+- Initdb should create xlogdir if set.
+
+##2014-08-27 - Supported Release 3.4.3
+###Summary
+
+This release fixes Ubuntu 10.04 with Facter 2.2.
+
+####Features
+####Bugfixes
+- Use a regular expression to match the major OS version on Ubuntu.
+
+##2014-07-31 - Supported Release 3.4.2
+###Summary
+
+This release fixes recent Fedora versions.
+
+####Features
+####Bugfixes
+- Fix Fedora.
+
+##2014-07-15 - Supported Release 3.4.1
+###Summary
+
+This release merely updates metadata.json so the module can be uninstalled and
+upgraded via the puppet module command.
+
+##2014-04-14 - Supported Release 3.4.0
+###Summary
+
+This feature rolls up several important features, the biggest being PostGIS
+handling and allowing `port` to be set on postgresql::server in order to
+change the port that Postgres listens on.  We've added support for RHEL7
+and Ubuntu 14.04, as well as allowing you to manage the service via
+`service_ensure` finally.
+
+####Features
+- Added `perl_package_name` for installing bindings.
+- Added `service_ensure` for allowing control of services.
+- Added `postgis_version` and postgis class for installing postgis.
+- Added `port` for selecting the port Postgres runs on.
+- Add support for RHEL7 and Ubuntu 14.04.
+- Add `default_db` to postgresql::server::database.
+- Widen the selection of unquoted parameters in postgresql_conf{}
+- Require the service within postgresql::server::reload for RHEL7.
+- Add `inherit` to postgresql::server::role.
+
+####Bugfixes
+
+##2014-03-04 - Supported Release 3.3.3
+###Summary
+
+This is a supported release.  This release removes a testing symlink that can
+cause trouble on systems where /var is on a seperate filesystem from the
+modulepath.
+
+####Features
+####Bugfixes
+####Known Bugs
+* SLES is not supported.
+
+##2014-03-04 - Supported Release 3.3.2
+###Summary
+This is a supported release. It fixes a problem with updating passwords on postgresql.org distributed versions of PostgreSQL.
+
+####Bugfixes
+- Correct psql path when setting password on custom versions.
+- Documentation updates
+- Test updates
+
+####Known Bugs
+* SLES is not supported.
+
+
+##2014-02-12 - Version 3.3.1
+####Bugfix:
 - Allow dynamic rubygems host
 
-2014-01-28 - Version 3.3.0
 
-Summary:
+##2014-01-28 - Version 3.3.0
+
+###Summary
 
 This release rolls up a bunch of bugfixes our users have found and fixed for
 us over the last few months.  This improves things for 9.1 users, and makes
@@ -13,14 +163,14 @@ this module usable on FreeBSD.
 This release is dedicated to 'bma', who's suffering with Puppet 3.4.1 issues
 thanks to Puppet::Util::SUIDManager.run_and_capture.
 
-Features:
+####Features
  - Add lc_ config entry settings
  - Can pass template at database creation.
  - Add FreeBSD support.
  - Add support for customer `xlogdir` parameter.
  - Switch tests from rspec-system to beaker.  (This isn't really a feature)
 
-Bugfixes:
+####Bugfixes
  - Properly fix the deprecated Puppet::Util::SUIDManager.run_and_capture errors.
  - Fix NOREPLICATION option for Postgres 9.1
  - Wrong parameter name: manage_pg_conf -> manage_pg_hba_conf
@@ -33,26 +183,27 @@ Bugfixes:
  - Add some missing privileges.
  - Remove deprecated and unused concat::fragment parameters.
 
-2013-11-05 - Version 3.2.0
 
-Summary:
+##2013-11-05 - Version 3.2.0
+
+###Summary
 
 Add's support for Ubuntu 13.10 (and 14.04) as well as x, y, z.
 
-Features:
+####Features
 - Add versions for Ubuntu 13.10 and 14.04.
 - Use default_database in validate_db_connection instead of a hardcoded
 'postgres'
 - Add globals/params layering for default_database.
 - Allow specification of default database name.
 
-Bugs:
+####Bugs
 - Fixes to the README.
 
 
-2013-10-25 - Version 3.1.0
+##2013-10-25 - Version 3.1.0
 
-Summary:
+###Summary
 
 This is a minor feature and bug fix release.
 
@@ -62,12 +213,12 @@ The default version of Fedora 17 has now been added, so that Fedora 17 users can
 
 And finally we've extended the capabilities of the defined type postgresql::validate_db_connection so that now it can handle retrying and sleeping between retries. This feature has been monopolized to fix a bug we were seeing with startup race conditions, but it can also be used by remote systems to 'wait' for PostgreSQL to start before their Puppet run continues.
 
-Features:
+####Features
 - Defined $default_version for Fedora 17 (Bret Comnes)
 - add search_path attribute to postgresql_psql resource (Jeremy Kitchen)
 - (GH-198) Add wait and retry capability to validate_db_connection (Ken Barber)
 
-Bugs:
+####Bugs
 - enabling defined postgres user password without resetting on every puppet run (jonoterc)
 - periods are valid in configuration variables also (Jeremy Kitchen)
 - Add zero length string to join() function (Jarl Stefansson)
@@ -76,34 +227,37 @@ Bugs:
 - Remove concat::setup for include in preparation for the next concat release (Ken Barber)
 
 
-2013-10-14 - Version 3.0.0
+##2013-10-14 - Version 3.0.0
 
 Final release of 3.0, enjoy!
 
-2013-10-14 - Version 3.0.0-rc3
 
-Summary:
+##2013-10-14 - Version 3.0.0-rc3
+
+###Summary
 
 Add a parameter to unmanage pg_hba.conf to fix a regression from 2.5, as well
 as allowing owner to be passed into x.
 
-Features:
+####Features
 - `manage_pg_hba_conf` parameter added to control pg_hba.conf management.
 - `owner` parameter added to server::db.
 
-2013-10-09 - Version 3.0.0-rc2
 
-Summary:
+##2013-10-09 - Version 3.0.0-rc2
+
+###Summary
 
 A few bugfixes have been found since -rc1.
 
-Fixes:
+####Fixes
 - Special case for $datadir on Amazon
 - Fix documentation about username/password for the postgresql_hash function
 
-2013-10-01 - Version 3.0.0-rc1
 
-Summary:
+##2013-10-01 - Version 3.0.0-rc1
+
+###Summary
 
 Version 3 was a major rewrite to fix some internal dependency issues, and to
 make the new Public API more clear. As a consequence a lot of things have
@@ -224,67 +378,60 @@ The older concat module is now deprecated and moved into the
 you may need to intervene during the installing of this package - as both use
 the same `concat` namespace.
 
-2013-09-09 Release 2.5.0
-=======================
+---
+##2013-09-09 Release 2.5.0
 
-Summary
--------
+###Summary
 
 The focus of this release is primarily to capture the fixes done to the
 types and providers to make sure refreshonly works properly and to set
 the stage for the large scale refactoring work of 3.0.0.
 
-Features
---------
+####Features
 
-Bugfixes 
---------
+
+####Bugfixes 
 - Use boolean for refreshonly.
 - Fix postgresql::plperl documentation.
 - Add two missing parameters to config::beforeservice
 - Style fixes
 
 
-2013-08-01 Release 2.4.1
-========================
+##2013-08-01 Release 2.4.1
 
-Summary
--------
+###Summary
 
 This minor bugfix release solves an idempotency issue when using plain text
 passwords for the password_hash parameter for the postgresql::role defined
 type. Without this, users would continually see resource changes everytime
 your run Puppet.
 
-Bugfixes
----------
+####Bugfixes
 - Alter role call not idempotent with cleartext passwords (Ken Barber)
 
-2013-07-19 Release 2.4.0
-========================
 
-Summary
--------
+##2013-07-19 Release 2.4.0
+
+###Summary
+
 This updates adds the ability to change permissions on tables, create template
 databases from normal databases, manage PL-Perl's postgres package, and
 disable the management of `pg_hba.conf`.
 
-Features
---------
+####Features
 - Add `postgresql::table_grant` defined resource
 - Add `postgresql::plperl` class
 - Add `manage_pg_hba_conf` parameter to the `postgresql::config` class
 - Add `istemplate` parameter to the `postgresql::database` define
 
-Bugfixes
---------
+####Bugfixes
 - Update `postgresql::role` class to be able to update roles when modified
 instead of only on creation.
 - Update tests
 - Fix documentation of `postgresql::database_grant`
 
-2.3.0
-=====
+
+##2.3.0
 
 This feature release includes the following changes:
 
@@ -295,8 +442,8 @@ This feature release includes the following changes:
   (Chris Price)
 * Improved integration testing (Ken Barber)
 
-2.2.1
-=====
+
+##2.2.1
 
 This release fixes a bug whereby one of our shell commands (psql) were not ran from a globally accessible directory. This was causing permission denied errors when the command attempted to change user without changing directory.
 
@@ -310,8 +457,8 @@ This patch should correct that.
 
 * Set /tmp as default CWD for postgresql_psql
 
-2.2.0
-=====
+
+##2.2.0
 
 This feature release introduces a number of new features and bug fixes.
 
@@ -345,8 +492,9 @@ This release in particular has largely been contributed by the community members
 * Allow SQL commands to be run against a specific DB (Carlos Villela)
 * Drop trailing comma to support Puppet 2.6 (Michael Arnold)
 
-2.1.1
-=====
+
+##2.1.1
+
 
 This release provides a bug fix for RHEL 5 and Centos 5 systems, or specifically systems using PostgreSQL 8.1 or older. On those systems one would have received the error:
 
@@ -364,8 +512,8 @@ This bug is due to a new feature we had added in 2.1.0, whereby the `include` di
 * Only install `include` directive and included file on PostgreSQL >= 8.2
 * Add system tests for Centos 5
 
-2.1.0
-=====
+
+##2.1.0
 
 This release is primarily a feature release, introducing some new helpful constructs to the module.
 
@@ -448,8 +596,8 @@ A big thanks to all those listed below who made this feature release possible :-
 2013-02-15 - Erik Dalén <dalen@spotify.com>
 * Fix case whereby we were modifying a hash after creation
 
-2.0.1
-=====
+
+##2.0.1
 
 Minor bugfix release.
 
@@ -459,8 +607,7 @@ Minor bugfix release.
 2013-01-15 - Jordi Boggiano <j.boggiano@seld.be>
  * Add support for ubuntu 12.10 status (3504405)
 
-2.0.0
-=====
+##2.0.0
 
 Many thanks to the following people who contributed patches to this
 release:
@@ -513,9 +660,9 @@ Notable features:
 
    * Many other bug fixes and improvements!
 
+---
+##1.0.0
 
-1.0.0
-=====
 2012-09-17 - Version 0.3.0 released
 
 2012-09-14 - Chris Price <chris@puppetlabs.com>
